@@ -109,7 +109,7 @@ npm run dev
 
 登录用户名密码加QQ群547252502获取。
 
-#### Screenshots
+#### 截图 Screenshots
 
 ![1.png](https://github.com/godcheese/nimrod-backend/blob/master/screenshots/1.png)
 ![2.png](https://github.com/godcheese/nimrod-backend/blob/master/screenshots/2.png)
