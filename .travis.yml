@@ -14,4 +14,5 @@ language: java
 services:
   - mysql
 script:
-  - ./scripts/travis.build.sh
+  - chmod +x ./scripts/travisci.build.sh
+  - ./scripts/travisci.build.sh
