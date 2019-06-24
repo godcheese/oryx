@@ -1,17 +1,8 @@
-os: linux
-jdk: oraclejdk8
-dist: trusty
-sudo: true # faster builds
-group: stable
-addons:
-  apt:
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
-      - mysql-client
-language: java
-services:
-  - mysql
-script:
-  - ./scripts/travis.build.sh
+stages:
+- install
+install:
+  stage: install
+  image: maven:3.5-jdk-8
+  script:
+    - chmod +x ./scripts/gitlabci.build.sh
+    - ./scripts/gitlabci.build.sh
