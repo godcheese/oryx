@@ -10,11 +10,8 @@ addons:
     packages:
       - mysql-server
       - mysql-client
-install:
-  - ./mvnw -e clean install -DskipTests=true -Dmaven.javadoc.skip=true -Dspring-boot.run.profiles=dev
-  - ./mvnw -e clean install -DskipTests=true -Dmaven.javadoc.skip=true -Dspring-boot:run.prifiles=prod
 language: java
 services:
   - mysql
-before_script:
+script:
   - ./scripts/travis.build.sh
