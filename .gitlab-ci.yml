@@ -1,11 +1,17 @@
-stages:
-- install
-install:
-  stage: install
-  image: maven:3.5-jdk-8
-  before_script:
-  - java -version
-  - chmod +x mvnw
-  script:
-  - ./mvnw -e clean install -DskipTests=true -Dmaven.javadoc.skip=true -Dspring-boot.run.profiles=dev
-  - ./mvnw -e clean install -DskipTests=true -Dmaven.javadoc.skip=true -Dspring-boot.run.profiles=prod
+os: linux
+jdk: oraclejdk8
+dist: trusty
+sudo: true # faster builds
+group: stable
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+      - mysql-client
+language: java
+services:
+  - mysql
+script:
+  - ./scripts/travis.build.sh
