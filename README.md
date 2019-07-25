@@ -23,6 +23,9 @@
 </p>
 
 ## 简介 Introduction
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3bd07e74693d4e8dbace09fa0fbdc263)](https://app.codacy.com/app/godcheese/nimrod-backend?utm_source=github.com&utm_medium=referral&utm_content=godcheese/nimrod-backend&utm_campaign=Badge_Grade_Dashboard)
+
 > Nimrod 英[ˈnimrɔd] 美[ˈnɪmˌrɑd] n.	好猎手，猎人;
 
 Nimrod 是一款基于 Spring Boot 封装前后端分离 Java Web 平台快速开发脚手架，所采用的技术栈包括 Spring Boot、Spring、Spring MVC、MyBatis、Vue 等，遵守[阿里巴巴 Java 开发规约](https://github.com/alibaba/p3c)，帮助养成良好的编码习惯。整体采用 RBAC （ Role-Based Access Control ，基于角色的访问控制），具有严格的权限控制模块，支持系统与模块分离开发。最后希望这个项目能够对你有所帮助。
