@@ -11,9 +11,8 @@
   <a href="https://travis-ci.org/godcheese/nimrod-backend" rel="nofollow">
     <img src="https://travis-ci.org/godcheese/nimrod-backend.svg?branch=master" alt="Build Status">
   </a>
-   <a href="https://app.codacy.com/app/godcheese/nimrod-backend?utm_source=github.com&utm_medium=referral&utm_content=godcheese/nimrod-backend&utm_campaign=Badge_Grade_Dashboard" rel="nofollow">
-    <img src="https://api.codacy.com/project/badge/Grade/3bd07e74693d4e8dbace09fa0fbdc263" alt="Codacy Badge">
-  </a>
+  <a href="https://sonarcloud.io/dashboard?id=godcheese_nimrod-backend"><img src="https://sonarcloud.io/api/project_badges/measure?project=godcheese_nimrod-backend&metric=alert_status" alt="Quality Gate Status"/></a>
+  <a href="https://www.codacy.com/app/godcheese/nimrod-backend?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=godcheese/nimrod-backend&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/d8feb5cbcb7e4d3db0c95b29f23ffa3d" alt="Codacy Badge"/></a>
   <a href="https://github.com/godcheese/nirmod-backend/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt="license">
   </a>
@@ -26,7 +25,6 @@
 </p>
 
 ## 简介 Introduction
-
 > Nimrod 英[ˈnimrɔd] 美[ˈnɪmˌrɑd] n.	好猎手，猎人;
 
 Nimrod 是一款基于 Spring Boot 封装前后端分离 Java Web 平台快速开发脚手架，所采用的技术栈包括 Spring Boot、Spring、Spring MVC、MyBatis、Vue 等，遵守[阿里巴巴 Java 开发规约](https://github.com/alibaba/p3c)，帮助养成良好的编码习惯。整体采用 RBAC （ Role-Based Access Control ，基于角色的访问控制），具有严格的权限控制模块，支持系统与模块分离开发。最后希望这个项目能够对你有所帮助。
