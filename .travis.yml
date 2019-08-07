@@ -1,4 +1,3 @@
-os: linux
 jdk: oraclejdk8
 dist: trusty
 sudo: true # faster builds
