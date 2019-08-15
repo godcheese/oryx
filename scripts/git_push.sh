@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# Linux platform bash file
 echo "author godcheese"
-CURRENT_DIR=`pwd`
-SCRIPTS_DIR=$(cd `dirname $0`; pwd)
-cd ${SCRIPTS_DIR}
+CURRENT_DIR=$(pwd)
+SCRIPTS_DIR=$(cd "$(dirname $0)" || exit; pwd)
+cd "${SCRIPTS_DIR}" || exit
 cd ..
 echo "Add file..."
 git add -A
@@ -16,4 +15,4 @@ git commit -m "$REMARK"
 echo "Submit code..."
 git push origin master
 echo "Submit complete,close..."
-cd ${CURRENT_DIR}
+cd "${CURRENT_DIR}" || exit

@@ -1,7 +1,7 @@
 package com.gioov.example.controller;
 
 import com.gioov.example.Example;
-import com.gioov.nimrod.common.Common;
+import com.gioov.oryx.common.Common;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -12,7 +12,7 @@ public class Example {
     }
 
     public class Api {
-        public static final String EXAMPLE = com.gioov.nimrod.common.Url.API + Example.Page.EXAMPLE;
+        public static final String EXAMPLE = com.gioov.oryx.common.Url.API + Example.Page.EXAMPLE;
     }
 
 }

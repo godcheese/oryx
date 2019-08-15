@@ -7,7 +7,7 @@
 │   │   │
 │   │   └── com.gioov ----------------- 项目主类包
 │   │       │
-│   │       ├── nimrod ---------------- Nimrod 核心模块存放目录
+│   │       ├── oryx ---------------- Oryx Backend 核心模块存放目录
 │   │       │   │  
 │   │       │   ├─ common ------------- 项目公用部分
 │   │       │   │
@@ -48,13 +48,15 @@
 
 - 一、安装 JDK 8+、MySQL 5.7+
 - 二、导入数据库
-`/db/mysql/nimrod/nimrod.sql`
-- 三、运行 `java -jar nimrod-*.jar`，浏览器打开 `http://localhost:8083/nimrod`
+`/db/mysql/oryx/oryx.sql`
+`/db/mysql/oauth2/oauth2.sql`
+`/db/mysql/quartz/tables_mysql_innodb.sql`
+- 三、运行 `java -jar oryx-*.jar`，浏览器打开 `http://localhost:8083/oryx`
 
 ### 开发调试
 
 - 一、安装 JDK 8+、MySQL 5.7+、Maven 3.5+
 - 二、在 Intelli IDEA 中打开项目
-- 三、在 Terminal 中运行 `mvn spring-boot:run`，浏览器打开 `http://localhost:8083/nimrod`
+- 三、在 Terminal 中运行 `mvn spring-boot:run`，浏览器打开 `http://localhost:8083/oryx`
 
-### [环境搭建](https://github.com/godcheese/nimrod/blob/master/docs/java.md)
+### [环境搭建](https://github.com/godcheese/oryx/blob/master/docs/java.md)

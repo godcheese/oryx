@@ -1,11 +1,11 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 127.0.0.1
+ Source Server         : localhost
  Source Server Type    : MySQL
  Source Server Version : 50724
- Source Host           : 127.0.0.1:3306
- Source Schema         : nimrodbackend
+ Source Host           : localhost:3306
+ Source Schema         : oryx
 
  Target Server Type    : MySQL
  Target Server Version : 50724
