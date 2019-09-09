@@ -12,16 +12,10 @@
     <img src="https://travis-ci.org/godcheese/oryx.svg?branch=master" alt="Build Status">
   </a>
   <a href="https://sonarcloud.io/dashboard?id=godcheese_oryx"><img src="https://sonarcloud.io/api/project_badges/measure?project=godcheese_oryx&metric=alert_status" alt="Quality Gate Status"/></a>
-  <a href="https://www.codacy.com/app/godcheese/oryx?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=godcheese/oryx&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/d8feb5cbcb7e4d3db0c95b29f23ffa3d" alt="Codacy Badge"/></a>
-  <a href="https://github.com/godcheese/nirmod-backend/blob/master/LICENSE">
+  <a href="https://www.codacy.com/manual/godcheese/oryx?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=godcheese/oryx&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/3c0ed91f0e52448ca722d7e9c6b97bb0" alt="Codacy Badge"/></a>
+  <a href="https://github.com/godcheese/oryx/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt="license">
   </a>
-<!--   <a href="https://gitter.im/repo-name/discuss">
-    <img src="https://badges.gitter.im/Join%20Chat.svg" alt="gitter">
-  </a> -->
-<!--   <a href="https://godcheese.github.io/oryx/donate">
-    <img src="https://img.shields.io/badge/%24-donate-ff69b4.svg" alt="donate">
-  </a> -->
 </p>
 
 ## 简介 Introduction
