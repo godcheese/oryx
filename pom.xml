@@ -3,26 +3,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.gioov</groupId>
+    <artifactId>oryx</artifactId>
+    <version>0.2.0</version>
+    <!-- jar 打包引用此属性值 -->
+<!--    <packaging>jar</packaging>-->
+    <!-- war 打包引用此属性值 -->
+     <packaging>war</packaging>
+    <name>${project.artifactId}</name>
+    <description>Demo project for Spring Boot</description>
+    <url>http://www.godcheese.com/</url>
+
     <properties>
-        <oryx.version>0.1.0</oryx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <finalName>${project.name}-${project.version}</finalName>
         <resource.delimiter>${}</resource.delimiter>
     </properties>
-
-    <groupId>com.gioov</groupId>
-    <artifactId>oryx</artifactId>
-    <version>${oryx.version}</version>
-    <!-- jar 打包引用此属性值 -->
-    <packaging>jar</packaging>
-    <!-- war 打包引用此属性值 -->
-    <!-- <packaging>war</packaging> -->
-
-    <name>${project.artifactId}</name>
-    <description>Demo project for Spring Boot</description>
-    <url>http://www.godcheese.com/</url>
 
     <developers>
         <developer>
@@ -55,13 +53,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <!-- jar 打包部署时请注释此处，war 打包部署到外部 Tomcat 时无需自带 Tomcat -->
-            <!-- <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions> -->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -70,12 +61,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2 -->
-        <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-            <version>2.3.6.RELEASE</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
         <dependency>
@@ -143,6 +128,18 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>1.0.10.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
         <!-- 本地引用依赖包 -->
         <dependency>
             <groupId>com.gioov</groupId>
@@ -201,9 +198,9 @@
             <resource>
                 <directory>${project.basedir}/lib</directory>
                 <!-- jar 打包引用此属性值 -->
-                <targetPath>BOOT-INF/lib</targetPath>
+<!--                <targetPath>BOOT-INF/lib</targetPath>-->
                 <!-- war 打包引用此属性值 -->
-                <!-- <targetPath>${project.basedir}/target/${project.build.finalName}/WEB-INF/lib</targetPath> -->
+                 <targetPath>${project.basedir}/target/${project.build.finalName}/WEB-INF/lib</targetPath>
                 <includes>
                     <include>**/*.jar</include>
                 </includes>

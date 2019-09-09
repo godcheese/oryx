@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gioov.oryx.oauth.mapper.AccessTokenMapper">
+    <resultMap id="BaseResultMap" type="com.gioov.oryx.oauth.entity.AccessTokenEntity">
+        <id column="token_id" property="tokenId" jdbcType="VARCHAR"/>
+        <result column="token" property="token" jdbcType="BINARY"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="client_id" property="clientId" jdbcType="VARCHAR"/>
+        <result column="authentication" property="authentication" jdbcType="BINARY"/> <!-- MySQL type blob -->
+        <result column="refresh_token" property="refreshToken" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="TableName">
+        `oauth_access_token`
+    </sql>
+
+    <sql id="BaseColumnList">
+        `token_id`, `token`, `user_name`, `client_id`, `authentication`, `refresh_token`
+    </sql>
+
+    <delete id="deleteOne" parameterType="long">
+        delete from
+        <include refid="TableName"/>
+        where `token_id` = #{tokenId}
+    </delete>
+
+    <delete id="deleteAll">
+        delete from
+        <include refid="TableName"/>
+        where `token_id` in
+        (
+        <foreach collection="list" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+
+    <select id="getOne" resultMap="BaseResultMap">
+        select
+        <include refid="BaseColumnList"/>
+        from
+        <include refid="TableName"/>
+        where `token_id` = #{tokenId} limit 1
+    </select>
+
+    <select id="pageAll" resultMap="BaseResultMap" parameterType="com.github.pagehelper.Page">
+        select
+        <include refid="BaseColumnList"/>
+        from
+        <include refid="TableName"/>
+    </select>
+
+    <update id="truncate">
+        truncate table
+        <include refid="TableName"/>
+    </update>
+
+</mapper>

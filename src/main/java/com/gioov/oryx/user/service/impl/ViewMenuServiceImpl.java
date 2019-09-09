@@ -11,6 +11,8 @@ import com.gioov.oryx.user.service.RoleService;
 import com.gioov.oryx.user.service.ViewMenuService;
 import com.github.pagehelper.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -200,5 +202,45 @@ public class ViewMenuServiceImpl implements ViewMenuService {
         roleViewMenuMapper.deleteAllByRoleIdAndViewMenuIdList(roleId, viewMenuIdList);
         return viewMenuIdList.size();
     }
+
+    @Override
+    public List<AntdVueMenu> listAllAsAntdVueMenuByUserId(Long userId) {
+        List<AntdVueMenu> vueMenuList = new ArrayList<>(0);
+        List<AntdVueMenu> vueMenuListResult = new ArrayList<>(0);
+        List<ViewMenuCategoryEntity> viewMenuCategoryEntityList = null;
+        List<UserRoleEntity> userRoleEntityList;
+        List<Long> roleIdList = new ArrayList<>(1);
+        if ((userRoleEntityList = userRoleMapper.listAllByUserId(userId)) != null) {
+            List<RoleEntity> roleEntityList;
+            if ((roleEntityList = roleService.listAllByUserRoleList(userRoleEntityList)) != null) {
+                for (RoleEntity roleEntity : roleEntityList) {
+                    roleIdList.add(roleEntity.getId());
+                }
+            }
+        }
+        viewMenuCategoryEntityList = viewMenuCategoryMapper.listAllByParentIdIsNullAndRoleIdList(roleIdList);
+        if(viewMenuCategoryEntityList != null) {
+            for (ViewMenuCategoryEntity viewMenuCategoryEntity : viewMenuCategoryEntityList) {
+                forEachViewMenuAndViewMenuCategoryByViewMenuCategoryId(viewMenuCategoryEntity.getId(), roleIdList, vueMenuList);
+                AntdVueMenu vueMenu = new AntdVueMenu();
+                vueMenu.setId(viewMenuCategoryEntity.getId());
+                vueMenu.setName(viewMenuCategoryEntity.getName());
+                vueMenu.setIcon(viewMenuCategoryEntity.getIcon());
+                vueMenu.setParentId(viewMenuCategoryEntity.getParentId());
+                vueMenu.setIsCategory(true);
+                vueMenuList.add(vueMenu);
+            }
+        }
+        for(AntdVueMenu vueMenu : vueMenuList) {
+            if(vueMenu.getParentId() == null) {
+                vueMenuListResult.add(vueMenu);
+            }
+        }
+        for(AntdVueMenu vueMenu : vueMenuListResult) {
+            vueMenu.setChildren(forEachVueMenuByVueMenuParentId(vueMenu.getId(), vueMenuList));
+        }
+        return vueMenuListResult;
+    }
+
 
 }

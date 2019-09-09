@@ -32,7 +32,7 @@ public class ApiCategoryServiceImpl implements ApiCategoryService {
     private ApiMapper apiMapper;
 
     @Autowired
-    private DictionaryService dictionaryService;
+    private FailureMessage failureMessage;
 
 //    @Override
 //    public Pagination<ApiCategoryEntity> pageAllParent(Integer page, Integer rows) {
@@ -80,11 +80,11 @@ public class ApiCategoryServiceImpl implements ApiCategoryService {
         for (Long id : idList) {
             ApiCategoryEntity viewPageCategoryEntity = apiCategoryMapper.getOneByParentId(id);
             if (viewPageCategoryEntity != null) {
-                throw new BaseResponseException(FailureMessage.DELETE_API_CATEGORY_FAIL1);
+                throw new BaseResponseException(failureMessage.i18n("api_category.delete_fail_has_category"));
             }
             ApiEntity apiEntity = apiMapper.getOneByApiCategoryId(id);
             if (apiEntity != null) {
-                throw new BaseResponseException(FailureMessage.DELETE_API_CATEGORY_FAIL2);
+                throw new BaseResponseException(failureMessage.i18n("api_category.delete_fail_has_api"));
             }
             apiCategoryMapper.deleteOne(id);
             result++;

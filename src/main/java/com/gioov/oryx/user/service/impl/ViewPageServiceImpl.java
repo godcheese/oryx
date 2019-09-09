@@ -30,6 +30,9 @@ public class ViewPageServiceImpl implements ViewPageService {
     @Autowired
     private RoleAuthorityMapper roleAuthorityMapper;
 
+    @Autowired
+    private FailureMessage failureMessage;
+
     @Override
     public Pagination<ViewPageEntity> pageAllByViewPageCategoryId(Long viewPageCategoryId, Integer page, Integer rows) {
         Pagination<ViewPageEntity> pagination = new Pagination<>();
@@ -52,7 +55,7 @@ public class ViewPageServiceImpl implements ViewPageService {
         String authority = viewPageEntity.getAuthority().toUpperCase();
         ViewPageEntity viewPageEntity2 = viewPageMapper.getOneByAuthority(authority);
         if (viewPageEntity2 != null) {
-            throw new BaseResponseException(FailureMessage.ADD_VIEW_PAGE_AUTHORITY_FAIL);
+            throw new BaseResponseException(failureMessage.i18n("view_page.add_fail_authority_exists"));
         }
         viewPageEntity.setAuthority(authority);
         viewPageEntity.setGmtModified(date);
@@ -68,7 +71,7 @@ public class ViewPageServiceImpl implements ViewPageService {
         String authority = viewPageEntity.getAuthority().toUpperCase();
         ViewPageEntity viewPageEntity2 = viewPageMapper.getOneByAuthority(authority);
         if (viewPageEntity2 != null && !viewPageEntity2.getId().equals(viewPageEntity.getId())) {
-            throw new BaseResponseException(FailureMessage.ADD_VIEW_PAGE_AUTHORITY_FAIL);
+            throw new BaseResponseException(failureMessage.i18n("view_page.save_fail_authority_exists"));
         }
         viewPageEntity1.setName(viewPageEntity.getName());
         viewPageEntity1.setUrl(viewPageEntity.getUrl());

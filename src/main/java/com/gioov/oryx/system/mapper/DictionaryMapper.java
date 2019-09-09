@@ -60,4 +60,6 @@ public interface DictionaryMapper extends CrudMapper<DictionaryEntity, Long> {
      */
     Page<DictionaryEntity> pageAllByDictionaryCategoryIdList(@Param("dictionaryCategoryIdList") List<Long> dictionaryCategoryIdList);
 
+    @Override
+    List<DictionaryEntity> listAll();
 }

@@ -2,14 +2,17 @@ package com.gioov.oryx.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gioov.oryx.common.properties.AppProperties;
 import com.gioov.oryx.mail.service.MailService;
 import com.gioov.oryx.system.service.DictionaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Properties;
 
 /**
  * @author godcheese [godcheese@outlook.com]
@@ -25,6 +28,9 @@ public class Common {
 
     @Autowired
     private DictionaryService dictionaryService;
+
+    @Autowired
+    private AppProperties appProperties;
 
     public void initialize() {
         // 首次启动加载数据字典到 ServletContext 内存
@@ -79,6 +85,18 @@ public class Common {
         return null;
     }
 
+    public Object i18n(String key) {
+        ClassPathResource classPathResource = new ClassPathResource("i18n/" +        appProperties.getI18n() + ".properties");
+        Properties properties = new Properties();
+        try {
+            properties.load(classPathResource.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return properties.get(key);
+    }
+
+
     /**
      * 默认区域/语言
      */
@@ -117,6 +135,6 @@ public class Common {
 //        objectMapper.setDateFormat(new SimpleDateFormat(dateFormatPattern != null ? dateFormatPattern : DEFAULT_DATE_FORMAT_PATTERN));
 //        objectMapper.setLocale((language != null && county != null) ? new Locale(language, county) : LOCALE);
 //        return objectMapper;
-//    }
+//
 
 }

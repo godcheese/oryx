@@ -53,7 +53,7 @@ public class CustomBasicErrorController extends AbstractErrorController {
         int code = httpStatus.value();
         Map<String, Object> errorAttributes = getErrorAttributes(request, true);
         LOGGER.error("status={},exception={}", code, errorAttributes);
-        code = codeSwitch(code);
+        code = RestControllerAdviceHandler.codeSwitch(code);
         httpStatus = HttpStatus.valueOf(code);
         Map<String, Object> model = Collections.unmodifiableMap(getErrorAttributes(
                 request, true));
@@ -70,25 +70,13 @@ public class CustomBasicErrorController extends AbstractErrorController {
     @RequestMapping
     @ResponseBody
     public ResponseEntity<FailureEntity> error(HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> errorAttributes = getErrorAttributes(request, true);
         HttpStatus httpStatus = getStatus(request);
-        int code = codeSwitch(httpStatus.value());
+        int code = httpStatus.value();
+        Map<String, Object> errorAttributes = getErrorAttributes(request, true);
+        LOGGER.error("status={},exception={}", code, errorAttributes);
+        code = RestControllerAdviceHandler.codeSwitch(code);
         httpStatus = HttpStatus.valueOf(code);
-        return new ResponseEntity<>(new FailureEntity(httpStatus.getReasonPhrase(), httpStatus.value()), httpStatus);
+        return new ResponseEntity<>(new FailureEntity((String) errorAttributes.get("message"), httpStatus.value()), httpStatus);
     }
 
-    public static int codeSwitch(int code) {
-        switch (code) {
-            case 403:
-                break;
-            case 404:
-                break;
-            case 500:
-                break;
-            default:
-                code = 500;
-                break;
-        }
-        return code;
-    }
 }

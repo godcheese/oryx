@@ -1,4 +1,4 @@
-package com.gioov.oryx.common.security;
+package com.gioov.oryx.common.jwt;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,7 @@ import org.springframework.web.filter.CorsFilter;
 public class CorsConfiguration {
 
     /**
-     * 使用了 interceptor，只有用此方法或 @Cors 注解才能有效配置 cors
+     * 使用了 interceptor，只有用此方法或 @Cors 注解才能有效配置 CORS
      */
     @Bean
     public CorsFilter corsFilter() {

@@ -97,4 +97,12 @@ public interface ViewMenuService {
      */
     int revokeAllByRoleIdAndViewMenuIdList(Long roleId, List<Long> viewMenuIdList);
 
+
+    /**
+     * 指定用户 id，获取用户的树形视图菜单
+     * @param userId
+     * @return
+     */
+    List<AntdVueMenu> listAllAsAntdVueMenuByUserId(Long userId);
+
 }

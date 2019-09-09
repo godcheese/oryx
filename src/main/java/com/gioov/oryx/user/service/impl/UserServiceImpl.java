@@ -1,11 +1,12 @@
 package com.gioov.oryx.user.service.impl;
 
+import com.gioov.oryx.common.FailureMessage;
+import com.gioov.oryx.common.jwt.JwtUserDetails;
 import com.gioov.tile.crypto.BCryptEncoderUtil;
 import com.gioov.tile.util.DateUtil;
 import com.gioov.tile.util.StringUtil;
 import com.gioov.tile.web.exception.BaseResponseException;
 import com.gioov.oryx.common.easyui.Pagination;
-import com.gioov.oryx.common.security.SimpleUser;
 import com.gioov.oryx.user.entity.UserEntity;
 import com.gioov.oryx.user.mapper.UserMapper;
 import com.gioov.oryx.user.service.DepartmentService;
@@ -41,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private FailureMessage failureMessage;
 
     @Override
     public UserEntity getOneByIdAndPassword(Long id, String password) {
@@ -109,36 +113,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity getCurrentUser() {
-        SimpleUser simpleUser;
-        if((simpleUser = getCurrentSimpleUser()) != null) {
-            return userMapper.getOne(simpleUser.getId());
+        JwtUserDetails jwtUserDetails;
+        if((jwtUserDetails = getCurrentSimpleUser()) != null) {
+            return userMapper.getOne(jwtUserDetails.getId());
         }
         return null;
     }
 
     @Override
     public UserEntity getCurrentUser(HttpServletRequest httpServletRequest) {
-        SimpleUser simpleUser;
-        if((simpleUser = getCurrentSimpleUser(httpServletRequest)) != null) {
-            return userMapper.getOne(simpleUser.getId());
+        JwtUserDetails jwtUserDetails;
+        if((jwtUserDetails = getCurrentSimpleUser(httpServletRequest)) != null) {
+            return userMapper.getOne(jwtUserDetails.getId());
         }
         return null;
     }
 
     @Override
-    public SimpleUser getCurrentSimpleUser() {
+    public JwtUserDetails getCurrentSimpleUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication != null) {
             Object principal = authentication.getPrincipal();
             if (principal instanceof UserDetails) {
-                return (SimpleUser) principal;
+                return (JwtUserDetails) principal;
             }
         }
         return null;
     }
 
     @Override
-    public SimpleUser getCurrentSimpleUser(HttpServletRequest httpServletRequest) {
+    public JwtUserDetails getCurrentSimpleUser(HttpServletRequest httpServletRequest) {
         SecurityContextImpl securityContextImpl = (SecurityContextImpl) httpServletRequest.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
         Authentication authentication;
         if (securityContextImpl != null) {
@@ -149,7 +153,7 @@ public class UserServiceImpl implements UserService {
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
             if (principal instanceof UserDetails) {
-                return (SimpleUser) principal;
+                return (JwtUserDetails) principal;
             }
         }
         return null;
@@ -175,7 +179,7 @@ public class UserServiceImpl implements UserService {
 //                        }
 //            }
 //        } catch (Exception e) {
-//            throw new BaseResponseException(FailureMessage.LOGOUT_FAIL);
+//            throw new BaseResponseException(failureMessage.LOGOUT_FAIL);
 //        }
 //    }
 
@@ -233,7 +237,7 @@ public class UserServiceImpl implements UserService {
         Date date = new Date();
         userEntity.setUsername(userEntity.getUsername().trim());
         if (userMapper.getOneByUsername(userEntity.getUsername()) != null) {
-            throw new BaseResponseException("该用户名已存在");
+            throw new BaseResponseException(failureMessage.i18n("user.username_exists"));
         }
         userEntity.setPassword(encodePassword(userEntity.getPassword().trim()));
         userEntity.setGmtModified(date);
@@ -248,7 +252,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setUsername(userEntity.getUsername().trim());
         UserEntity userEntity1 = userMapper.getOneByUsername(userEntity.getUsername());
         if (userEntity1 != null && !userEntity1.getId().equals(userEntity.getId())) {
-            throw new BaseResponseException("该用户名已存在");
+            throw new BaseResponseException(failureMessage.i18n("user.username_exists"));
         }
         if(userEntity.getPassword() != null && !"".equals(userEntity.getPassword().trim())) {
             userEntity.setPassword(encodePassword(userEntity.getPassword().trim()));

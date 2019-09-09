@@ -39,6 +39,9 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleAuthorityMapper roleAuthorityMapper;
 
+    @Autowired
+    private FailureMessage failureMessage;
+
     /**
      * 根据用户关联角色来获取所有角色
      *
@@ -93,7 +96,7 @@ public class RoleServiceImpl implements RoleService {
         String value = roleEntity.getValue().toUpperCase();
         RoleEntity roleEntity2 = roleMapper.getOneByValue(value);
         if (roleEntity2 != null) {
-            throw new BaseResponseException(FailureMessage.ADD_ROLE_VALUE_FAIL);
+            throw new BaseResponseException(failureMessage.i18n("role.add_fail_value_exists"));
         }
         roleEntity.setGmtModified(date);
         roleEntity.setGmtCreated(date);
@@ -107,7 +110,7 @@ public class RoleServiceImpl implements RoleService {
         String value = roleEntity.getValue().toUpperCase();
         RoleEntity roleEntity2 = roleMapper.getOneByValue(value);
         if (roleEntity2 != null && !roleEntity2.getId().equals(roleEntity.getId())) {
-            throw new BaseResponseException(FailureMessage.ADD_ROLE_VALUE_FAIL);
+            throw new BaseResponseException(failureMessage.i18n("role.save_fail_value_exists"));
         }
         roleEntity.setGmtModified(new Date());
         roleMapper.updateOne(roleEntity);
@@ -120,9 +123,8 @@ public class RoleServiceImpl implements RoleService {
         int result = 0;
         for (Long id : idList) {
             UserRoleEntity userRoleEntity = userRoleMapper.getOneByRoleId(id);
-            LOGGER.info("userRoleEntity={}",userRoleEntity);
             if(userRoleEntity != null) {
-                throw new BaseResponseException("删除失败，该角色下存在用户");
+                throw new BaseResponseException(failureMessage.i18n("role.delete_fail_has_user"));
             }
             roleMapper.deleteOne(id);
             roleAuthorityMapper.deleteAllByRoleId(id);

@@ -34,6 +34,7 @@ import java.util.*;
 public class OperationLogServiceImpl implements OperationLogService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OperationLogServiceImpl.class);
+
     @Autowired
     private OperationLogMapper operationLogMapper;
 

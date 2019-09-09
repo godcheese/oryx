@@ -3,13 +3,15 @@ package com.gioov.oryx;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.Instant;
+import java.io.IOException;
+import java.util.Properties;
 
 @RunWith(SpringRunner.class)
+@ActiveProfiles("dev")
 @SpringBootTest
 public class OryxBootstrapTests {
 
@@ -19,12 +21,16 @@ public class OryxBootstrapTests {
 
     @Test
     public void testPassword() {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-       System.out.println(passwordEncoder.encode("123456"));
-        long begin = Instant.now().toEpochMilli();
 
-        System.out.println(begin);
-        System.out.println(Instant.now().toEpochMilli() - begin);
+//        ClassPathResource classPathResource = new ClassPathResource("classpath:i18n/zh_cn.properties");
+//        Properties properties = new Properties();
+//        try {
+//            properties.load(classPathResource.getInputStream());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println(properties.get("user.login_fail_account_or_password_error.message"));
+
 
     }
 

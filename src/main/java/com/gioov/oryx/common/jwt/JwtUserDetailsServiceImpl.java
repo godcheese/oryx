@@ -1,4 +1,4 @@
-package com.gioov.oryx.common.security;
+package com.gioov.oryx.common.jwt;
 
 import com.gioov.oryx.common.properties.AppProperties;
 import com.gioov.oryx.system.service.DictionaryService;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,32 +25,34 @@ import static com.gioov.oryx.user.service.UserService.SYSTEM_ADMIN;
 
 /**
  * @author godcheese [godcheese@outlook.com]
- * @date 2018-02-22
+ * @date 2019-08-28
  */
-@Service
-public class SimpleUserDetailsServiceImpl implements UserDetailsService {
+@Component
+public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleUserDetailsServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUserDetailsServiceImpl.class);
 
-    @Autowired
-    private AppProperties appProperties;
+    public static final String ROLE_PREFIX = "ROLE_";
 
     @Autowired
     private UserMapper userMapper;
 
     @Autowired
-    private RoleMapper roleMapper;
+    private DictionaryService dictionaryService;
+
+    @Autowired
+    private AppProperties appProperties;
 
     @Autowired
     private UserRoleMapper userRoleMapper;
 
     @Autowired
-    private RoleAuthorityMapper roleAuthorityMapper;
-
-    public static final String ROLE_PREFIX = "ROLE_";
+    private RoleMapper roleMapper;
 
     @Autowired
-    private DictionaryService dictionaryService;
+    private RoleAuthorityMapper roleAuthorityMapper;
+
+    private UserEntity userEntity;
 
     /**
      * 角色是否存在
@@ -70,35 +72,26 @@ public class SimpleUserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public SimpleUserDetails loadUserByUsername(String account) {
+    public JwtUserDetails loadUserByUsername(String account) {
         // 从数据库中获取 user 实体
-        UserEntity userEntity = userMapper.getOneByUsername(account);
-        if (userEntity == null) {
-            throw new UsernameNotFoundException("Account " + account + " not found");
-        }
-        if (userEntity.getGmtDeleted() != null) {
-            throw new UsernameNotFoundException("Account " + account + " not found");
-        }
-        boolean enabled = true;
+        userEntity = userMapper.getOneByUsername(account);
+//        if (userEntity == null) {
+//            throw new UsernameNotFoundException("Account " + account + " not found");
+//        }
+//        if (userEntity.getGmtDeleted() != null) {
+//            throw new UsernameNotFoundException("Account " + account + " not found");
+//        }
+//        boolean enabled = true;
         List<SimpleGrantedAuthority> simpleGrantedAuthorityList = listAllSimpleGrantedAuthorityByUserId(userEntity.getId());
-        Integer isOrNotIs = Integer.valueOf(String.valueOf(dictionaryService.get("IS_OR_NOT", "IS")));
-        if (userEntity.getEnabled() == null || !userEntity.getEnabled().equals(isOrNotIs)) {
-            boolean isExistSystemAdminRole = false;
-            for (SimpleGrantedAuthority simpleGrantedAuthority : simpleGrantedAuthorityList) {
-                String authority = simpleGrantedAuthority.getAuthority();
-                if (authority.indexOf(ROLE_PREFIX) == 0 && isExistSystemAdminRole(authority.substring(ROLE_PREFIX.length()))) {
-                    isExistSystemAdminRole = true;
-                }
-            }
-            if (!isExistSystemAdminRole) {
-                enabled = false;
-            }
-        }
 
         for(SimpleGrantedAuthority s: simpleGrantedAuthorityList) {
-            LOGGER.info("s={}", s.getAuthority());
+            LOGGER.info("getAuthority={}", s.getAuthority());
         }
-        return SimpleUser.builder().id(userEntity.getId()).username(userEntity.getUsername()).password(userEntity.getPassword()).authorities(simpleGrantedAuthorityList).disabled(!enabled).build();
+        return new JwtUserDetails(userEntity.getId(),userEntity.getUsername(),userEntity.getPassword(), simpleGrantedAuthorityList, userEntity.getGmtPasswordLastModified());
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
     }
 
     /**

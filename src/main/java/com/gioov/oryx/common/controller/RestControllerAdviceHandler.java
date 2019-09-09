@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.web.servlet.MultipartProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -29,11 +31,16 @@ public class RestControllerAdviceHandler {
     @Autowired
     private MultipartProperties multipartProperties;
 
-    @ExceptionHandler(BaseResponseException.class)
+    @ExceptionHandler({BaseResponseException.class})
     public ResponseEntity<FailureEntity> defaultExceptionHandler(HttpServletRequest httpServletRequest, Throwable throwable) {
         HttpStatus httpStatus = getStatus(httpServletRequest);
         throwable.printStackTrace();
-        return new ResponseEntity<>(new FailureEntity(throwable.getMessage()), httpStatus);
+        String message = throwable.getMessage();
+        int code = 0;
+        if(throwable instanceof BaseResponseException) {
+            code = ((BaseResponseException) throwable).getCode();
+        }
+        return new ResponseEntity<>(new FailureEntity(message, code), httpStatus);
     }
 
     @ExceptionHandler(MultipartException.class)
@@ -46,14 +53,14 @@ public class RestControllerAdviceHandler {
             message = "文件上传失败，上传超出最大文件上传大小（" + maxFileSize + "）或最大请求上传大小（" + maxRequestSize + "）";
         }
         throwable.printStackTrace();
-        return new ResponseEntity<>(new FailureEntity(message), httpStatus);
+        return new ResponseEntity<>(new FailureEntity(message, httpStatus.value()), httpStatus);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<FailureEntity> badCredentialsExceptionHandler(HttpServletRequest httpServletRequest, Throwable throwable) {
         HttpStatus httpStatus = getStatus(httpServletRequest);
         throwable.printStackTrace();
-        return new ResponseEntity<>(new FailureEntity(throwable.getMessage()), httpStatus);
+        return new ResponseEntity<>(new FailureEntity(throwable.getMessage(), httpStatus.value()), httpStatus);
     }
 
     public static HttpStatus getStatus(HttpServletRequest request) {
@@ -67,6 +74,23 @@ public class RestControllerAdviceHandler {
                 return HttpStatus.INTERNAL_SERVER_ERROR;
             }
         }
+    }
+
+    public static int codeSwitch(int code) {
+        switch (code) {
+            case 400:
+                break;
+            case 403:
+                break;
+            case 404:
+                break;
+            case 500:
+                break;
+            default:
+                code = 500;
+                break;
+        }
+        return code;
     }
 
 }

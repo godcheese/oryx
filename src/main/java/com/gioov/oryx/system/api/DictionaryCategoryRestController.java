@@ -1,5 +1,6 @@
 package com.gioov.oryx.system.api;
 
+import com.gioov.oryx.common.FailureMessage;
 import com.gioov.tile.web.exception.BaseResponseException;
 import com.gioov.oryx.common.operationlog.OperationLog;
 import com.gioov.oryx.common.operationlog.OperationLogType;

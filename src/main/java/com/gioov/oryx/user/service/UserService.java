@@ -1,8 +1,8 @@
 package com.gioov.oryx.user.service;
 
+import com.gioov.oryx.common.jwt.JwtUserDetails;
 import com.gioov.tile.web.exception.BaseResponseException;
 import com.gioov.oryx.common.easyui.Pagination;
-import com.gioov.oryx.common.security.SimpleUser;
 import com.gioov.oryx.user.entity.UserEntity;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,14 +101,14 @@ public interface UserService {
      * 获取当前 SimpleUser，可能会 null
      * @return UserEntity
      */
-    SimpleUser getCurrentSimpleUser();
+    JwtUserDetails getCurrentSimpleUser();
 
     /**
      * 获取当前 SimpleUser，更可靠的获取，但需指定 HttpServletRequest
      * @param httpServletRequest HttpServletRequest
      * @return UserEntity
      */
-    SimpleUser getCurrentSimpleUser(HttpServletRequest httpServletRequest);
+    JwtUserDetails getCurrentSimpleUser(HttpServletRequest httpServletRequest);
 
 //    /**
 //     * 注销当前用户

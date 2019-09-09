@@ -1,5 +1,6 @@
 package com.gioov.oryx.user.service.impl;
 
+import com.gioov.oryx.common.FailureMessage;
 import com.gioov.tile.web.exception.BaseResponseException;
 import com.gioov.oryx.common.easyui.ComboTree;
 import com.gioov.oryx.common.easyui.TreeGrid;
@@ -36,6 +37,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private FailureMessage failureMessage;
 
 //    @Override
 //    public Pagination<DepartmentEntity> pageAllParent(Integer page, Integer rows) {
@@ -112,11 +116,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         for (Long id : idList) {
             UserEntity userEntity = userMapper.getOneByDepartmentId(id);
             if (userEntity != null) {
-                throw new BaseResponseException("删除失败，该部门下存在用户");
+                throw new BaseResponseException(failureMessage.i18n("department.delete_fail_has_user"));
             }
             DepartmentEntity departmentEntity = departmentMapper.getOneByParentId(id);
             if (departmentEntity != null) {
-                throw new BaseResponseException("删除失败，该部门下存在子部门");
+                throw new BaseResponseException(failureMessage.i18n("department.delete_fail_has_children_department"));
             }
             departmentMapper.deleteOne(id);
             result++;

@@ -1,5 +1,6 @@
 package com.gioov.oryx.quartz.service.impl;
 
+import com.gioov.oryx.common.FailureMessage;
 import com.gioov.tile.web.exception.BaseResponseException;
 import com.gioov.oryx.common.easyui.Pagination;
 import com.gioov.oryx.quartz.entity.JobEntity;
@@ -33,6 +34,9 @@ public class JobServiceImpl implements JobService {
     @Autowired
     private JobMapper jobMapper;
 
+    @Autowired
+    private FailureMessage failureMessage;
+
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public Date addOne(String jobClassName, String jobGroup, String cronExpression, String description) throws BaseResponseException {
@@ -46,7 +50,7 @@ public class JobServiceImpl implements JobService {
             return scheduler.scheduleJob(jobDetail, cronTrigger);
         } catch (IllegalAccessException | InstantiationException | SchedulerException | ClassNotFoundException e) {
             e.printStackTrace();
-            throw new BaseResponseException("任务新增失败");
+            throw new BaseResponseException(failureMessage.i18n("quartz_job.add_fail"));
         }
     }
 
@@ -70,7 +74,7 @@ public class JobServiceImpl implements JobService {
             }
         } catch (SchedulerException e) {
             e.printStackTrace();
-            throw new BaseResponseException("任务删除失败");
+            throw new BaseResponseException(failureMessage.i18n("quartz_job.delete_fail"));
         }
         return index;
     }
@@ -89,7 +93,7 @@ public class JobServiceImpl implements JobService {
             scheduler.rescheduleJob(triggerKey, cronTrigger);
             return new Date();
         } catch (SchedulerException e) {
-            throw new BaseResponseException("任务更新失败");
+            throw new BaseResponseException(failureMessage.i18n("quartz_job.update_fail"));
         }
     }
 
@@ -105,7 +109,7 @@ public class JobServiceImpl implements JobService {
             }
         } catch (SchedulerException e) {
             e.printStackTrace();
-            throw new BaseResponseException("任务暂停失败");
+            throw new BaseResponseException(failureMessage.i18n("quartz_job.pause_fail"));
         }
         return index;
     }
@@ -123,7 +127,7 @@ public class JobServiceImpl implements JobService {
             }
         } catch (SchedulerException e) {
             e.printStackTrace();
-            throw new BaseResponseException("任务恢复失败");
+            throw new BaseResponseException(failureMessage.i18n("quartz_job.resume_fail"));
         }
         return index;
     }

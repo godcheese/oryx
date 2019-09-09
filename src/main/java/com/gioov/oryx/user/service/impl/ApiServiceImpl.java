@@ -31,6 +31,9 @@ public class ApiServiceImpl implements ApiService {
     @Autowired
     private RoleAuthorityMapper roleAuthorityMapper;
 
+    @Autowired
+    private FailureMessage failureMessage;
+
     @Override
     public Pagination<ApiEntity> pageAllByApiCategoryId(Long apiCategoryId, Integer page, Integer rows) {
         Pagination<ApiEntity> pagination = new Pagination<>();
@@ -53,7 +56,7 @@ public class ApiServiceImpl implements ApiService {
         Date date = new Date();
         String authority = apiEntity.getAuthority().toUpperCase();
         if (apiMapper.getOneByAuthority(authority) != null) {
-            throw new BaseResponseException(FailureMessage.ADD_API_AUTHORITY_FAIL);
+            throw new BaseResponseException(failureMessage.i18n("api.add_fail_authority_exists"));
         }
         apiEntity.setAuthority(authority);
         apiEntity.setGmtModified(date);

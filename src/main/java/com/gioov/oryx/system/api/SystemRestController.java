@@ -1,14 +1,15 @@
 package com.gioov.oryx.system.api;
 
+import com.gioov.oryx.common.FailureMessage;
 import com.gioov.tile.util.ColorUtil;
 import com.gioov.tile.util.ImageUtil;
 import com.gioov.tile.util.RandomUtil;
 import com.gioov.tile.util.ResourceUtil;
-import com.gioov.tile.web.exception.BaseResponseException;
 import com.gioov.oryx.common.operationlog.OperationLog;
 import com.gioov.oryx.common.operationlog.OperationLogType;
 import com.gioov.oryx.system.System;
 import com.gioov.oryx.system.service.DictionaryService;
+import com.gioov.tile.web.exception.BaseResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class SystemRestController {
     @Autowired
     private DictionaryService dictionaryService;
 
+    @Autowired
+    private FailureMessage failureMessage;
+
     /**
      * 获取验证码
      * @param httpServletResponse HttpServletResponse
@@ -73,7 +77,7 @@ public class SystemRestController {
             URL url =  ResourceUtil.getResource("/fonts/Arial.ttf");
             File file = new File(url.getFile());
             if(!file.exists()) {
-                throw new BaseResponseException("字体文件不存在");
+                throw new BaseResponseException(failureMessage.i18n("system.verify_code_create_fail_font_not_exists"));
             }
             verifyCodeImage = ImageUtil.createVerifyCodeImage(114, 40, ColorUtil.getRGBColorByHexString(hexBackgroundColor), RandomUtil.randomString(stringLength, RandomUtil.NUMBER_LETTER), Color.WHITE, file, yawp, interLine, expireIn);
 
@@ -88,7 +92,7 @@ public class SystemRestController {
 
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
-            throw new BaseResponseException("验证码生成发生错误");
+            throw new BaseResponseException(failureMessage.i18n("system.verify_code_create_fail"));
         }
 
     }
@@ -103,7 +107,7 @@ public class SystemRestController {
     @OperationLog(value = "获取系统信息", type = OperationLogType.API)
     @PreAuthorize("hasRole('" + SYSTEM_ADMIN + "') OR hasAuthority('" + SYSTEM + "/SYSTEM_INFO')")
     @GetMapping(value = "/system_info")
-    public ResponseEntity<Map<String, String>> systemInfo(HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<Map<String, String>> systemInfo(HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) throws BaseResponseException {
         Map<String, String> map = new HashMap<>(1);
         map.put("osName", java.lang.System.getProperty("os.name"));
         map.put("osVersion", java.lang.System.getProperty("os.version"));
@@ -123,5 +127,4 @@ public class SystemRestController {
 
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
-
 }

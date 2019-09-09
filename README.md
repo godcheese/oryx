@@ -60,7 +60,7 @@ Oryx 是一款基于 Spring Boot 封装前后端分离 Java Web 平台快速开�
 
 ## 特性 Features
 
-- OAtuh 2.0 ✓
+- Json Web Token(JWT) ✓
 - 数据字典 ✓
 - 角色管理 ✓
 - 用户管理 ✓
@@ -78,7 +78,7 @@ Oryx 是一款基于 Spring Boot 封装前后端分离 Java Web 平台快速开�
 - 部门管理 ✓
 - ~~工作流（Flowable）~~ ✓
 
-## [待开发功能 Todo list](https://github.com/godcheese/oryx/blob/master/todo.md)
+## [待开发功能 Todo list](https://github.com/godcheese/oryx/blob/master/TODO.md)
 
 ## 起步 Getting started
 
@@ -108,7 +108,7 @@ npm run dev
 ## [后端更新日志 Changelog](https://github.com/godcheese/oryx/releases)
 ## [前端更新日志 Changelog](https://github.com/godcheese/oryx-frontend-vue/releases)
 
-## [在线演示 Online Demo](http://demo.godcheese.com:9090)
+## [在线演示 Online Demo](https://oryx-frontend-vue.netlify.com/)
 
 登录用户名密码加QQ群547252502获取。
 

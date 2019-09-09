@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : 10.211.55.2
  Source Server Type    : MySQL
  Source Server Version : 50724
- Source Host           : localhost:3306
+ Source Host           : 10.211.55.2:3306
  Source Schema         : oryx
 
  Target Server Type    : MySQL
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 15/08/2019 11:34:54
+ Date: 06/09/2019 17:36:07
 */
 
 SET NAMES utf8mb4;
@@ -423,7 +423,7 @@ CREATE TABLE `operation_log`  (
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '响应状态码',
   `gmt_created` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1211 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for role
@@ -438,7 +438,7 @@ CREATE TABLE `role`  (
   `gmt_created` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_value`(`value`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1000 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of role
@@ -498,7 +498,7 @@ CREATE TABLE `role_view_menu_category`  (
   `role_id` bigint(20) UNSIGNED NOT NULL COMMENT '角色 id',
   `view_menu_category_id` bigint(20) UNSIGNED NOT NULL COMMENT '视图菜单分类名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色关联视图菜单分类表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色关联视图菜单分类表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of role_view_menu_category
@@ -507,6 +507,7 @@ INSERT INTO `role_view_menu_category` VALUES (1, 999, 1);
 INSERT INTO `role_view_menu_category` VALUES (2, 999, 2);
 INSERT INTO `role_view_menu_category` VALUES (3, 999, 3);
 INSERT INTO `role_view_menu_category` VALUES (4, 999, 4);
+INSERT INTO `role_view_menu_category` VALUES (5, 999, 5);
 
 -- ----------------------------
 -- Table structure for user
@@ -527,7 +528,7 @@ CREATE TABLE `user`  (
   `gmt_created` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_username`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1000 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user

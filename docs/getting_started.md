@@ -49,7 +49,6 @@
 - 一、安装 JDK 8+、MySQL 5.7+
 - 二、导入数据库
 `/db/mysql/oryx/oryx.sql`
-`/db/mysql/oauth2/oauth2.sql`
 `/db/mysql/quartz/tables_mysql_innodb.sql`
 - 三、运行 `java -jar oryx-*.jar`，浏览器打开 `http://localhost:8083/oryx`
 

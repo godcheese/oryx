@@ -55,6 +55,9 @@ public class ViewMenuCategoryServiceImpl implements ViewMenuCategoryService {
     @Autowired
     private DictionaryService dictionaryService;
 
+    @Autowired
+    private FailureMessage failureMessage;
+
     /**
      * 指定 用户id，获取所有视图菜单父级分类
      *
@@ -198,12 +201,12 @@ public class ViewMenuCategoryServiceImpl implements ViewMenuCategoryService {
             // 有子视图菜单分类报错
             ViewMenuCategoryEntity viewMenuCategoryEntity = viewMenuCategoryMapper.getOneByParentId(id);
             if (viewMenuCategoryEntity != null) {
-                throw new BaseResponseException(FailureMessage.DELETE_VIEW_MENU_CATEGORY_FAIL1);
+                throw new BaseResponseException(failureMessage.i18n("view_menu_category.delete_fail_has_children_category"));
             }
             // 有子视图菜单报错
             ViewMenuEntity viewMenuEntity = viewMenuMapper.getOneByViewMenuCategoryId(id);
             if (viewMenuEntity != null) {
-                throw new BaseResponseException(FailureMessage.DELETE_VIEW_MENU_CATEGORY_FAIL2);
+                throw new BaseResponseException(failureMessage.i18n("view_menu_category.delete_fail_has_view_menu"));
             }
             roleViewMenuCategoryMapper.deleteAllByViewMenuCategoryId(id);
             viewMenuCategoryMapper.deleteOne(id);

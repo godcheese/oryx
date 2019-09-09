@@ -62,6 +62,10 @@ public class UserEntity implements Serializable, Cloneable {
      */
     private String remark;
 
+    private Date gmtPasswordLastModified;
+
+    private Date gmtLastLogin;
+
     /**
      * 删除时间
      */
@@ -155,6 +159,22 @@ public class UserEntity implements Serializable, Cloneable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getGmtPasswordLastModified() {
+        return gmtPasswordLastModified;
+    }
+
+    public void setGmtPasswordLastModified(Date gmtPasswordLastModified) {
+        this.gmtPasswordLastModified = gmtPasswordLastModified;
+    }
+
+    public Date getGmtLastLogin() {
+        return gmtLastLogin;
+    }
+
+    public void setGmtLastLogin(Date gmtLastLogin) {
+        this.gmtLastLogin = gmtLastLogin;
     }
 
     public Date getGmtDeleted() {

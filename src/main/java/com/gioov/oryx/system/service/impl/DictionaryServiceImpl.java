@@ -1,5 +1,6 @@
 package com.gioov.oryx.system.service.impl;
 
+import com.gioov.oryx.common.FailureMessage;
 import com.gioov.tile.office.ExcelUtil;
 import com.gioov.tile.util.DateUtil;
 import com.gioov.tile.web.exception.BaseResponseException;
@@ -43,6 +44,9 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private FailureMessage failureMessage;
 
     @Override
     public void addDictionaryToServletContext() {
@@ -230,14 +234,14 @@ public class DictionaryServiceImpl implements DictionaryService {
                     DictionaryEntity dictionaryEntity1 = ExportByExcelUtil.importEntity(dictionaryEntity, map);
                     int effectRows = dictionaryMapper.insertOne(dictionaryEntity1);
                     if (effectRows <= 0) {
-                        throw new BaseResponseException("导入失败");
+                        throw new BaseResponseException(failureMessage.i18n("dictionary.import_fail"));
                     }
                 }
             }
 
         } catch (IOException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
-            throw new BaseResponseException("导入失败");
+            throw new BaseResponseException(failureMessage.i18n("dictionary.import_fail"));
         }
 
     }

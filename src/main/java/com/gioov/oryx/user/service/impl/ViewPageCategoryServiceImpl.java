@@ -36,6 +36,9 @@ public class ViewPageCategoryServiceImpl implements ViewPageCategoryService {
     @Autowired
     private DictionaryService dictionaryService;
 
+    @Autowired
+    private FailureMessage failureMessage;
+
     @Override
     public Pagination<ViewPageCategoryEntity> pageAllParent(Integer page, Integer rows) {
         Pagination<ViewPageCategoryEntity> pagination = new Pagination<>();
@@ -89,11 +92,11 @@ public class ViewPageCategoryServiceImpl implements ViewPageCategoryService {
         for (Long id : idList) {
             ViewPageCategoryEntity viewPageCategoryEntity = viewPageCategoryMapper.getOneByParentId(id);
             if (viewPageCategoryEntity != null) {
-                throw new BaseResponseException(FailureMessage.DELETE_VIEW_PAGE_CATEGORY_FAIL1);
+                throw new BaseResponseException(failureMessage.i18n("view_page_category.delete_fail_has_children_category"));
             }
             ViewPageEntity viewPageEntity = viewPageMapper.getOneByViewPageCategoryId(id);
             if (viewPageEntity != null) {
-                throw new BaseResponseException(FailureMessage.DELETE_VIEW_PAGE_CATEGORY_FAIL2);
+                throw new BaseResponseException(failureMessage.i18n("view_page_category.delete_fail_has_view_page"));
             }
             viewPageCategoryMapper.deleteOne(id);
             result++;

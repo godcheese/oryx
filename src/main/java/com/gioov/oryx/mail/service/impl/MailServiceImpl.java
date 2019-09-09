@@ -1,6 +1,7 @@
 package com.gioov.oryx.mail.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.gioov.oryx.common.FailureMessage;
 import com.gioov.tile.web.exception.BaseResponseException;
 import com.gioov.oryx.common.Common;
 import com.gioov.oryx.common.easyui.Pagination;
@@ -56,6 +57,9 @@ public class MailServiceImpl implements MailService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private FailureMessage failureMessage;
 
     private static final String MAIL_QUEUE = "mailQueue";
 
@@ -238,7 +242,7 @@ public class MailServiceImpl implements MailService {
             produce(common.objectToJson(mailEntity));
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BaseResponseException(e.getMessage());
+            throw new BaseResponseException(failureMessage.i18n("mail.add_fail"));
         }
         return mailEntity;
     }

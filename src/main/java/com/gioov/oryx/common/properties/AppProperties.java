@@ -17,12 +17,12 @@ import java.util.List;
 public class AppProperties {
 
     private String name;
-    private String secret;
     private String version;
     private String url;
     private List<String> systemAdminRole = new ArrayList<>(Collections.singletonList("SYSTEM_ADMIN"));
     private String fileUploadPath = "/upload";
     private String[] permitUrl;
+    private String i18n = "zh_cn";
 
     public String getName() {
         return name;
@@ -30,14 +30,6 @@ public class AppProperties {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSecret() {
-        return secret;
-    }
-
-    public void setSecret(String secret) {
-        this.secret = secret;
     }
 
     public String getVersion() {
@@ -78,5 +70,13 @@ public class AppProperties {
 
     public void setPermitUrl(String[] permitUrl) {
         this.permitUrl = permitUrl;
+    }
+
+    public String getI18n() {
+        return i18n != null ? i18n : "zh_cn";
+    }
+
+    public void setI18n(String i18n) {
+        this.i18n = i18n;
     }
 }

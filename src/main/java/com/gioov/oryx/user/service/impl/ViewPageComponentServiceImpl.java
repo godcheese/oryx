@@ -29,6 +29,9 @@ public class ViewPageComponentServiceImpl implements ViewPageComponentService {
     @Autowired
     private RoleAuthorityMapper roleAuthorityMapper;
 
+    @Autowired
+    private FailureMessage failureMessage;
+
     @Override
     public Pagination<ViewPageComponentEntity> pageAllByViewPageId(Long viewPageId, Integer page, Integer rows) {
         Pagination<ViewPageComponentEntity> pagination = new Pagination<>();
@@ -43,7 +46,7 @@ public class ViewPageComponentServiceImpl implements ViewPageComponentService {
         Date date = new Date();
         String authority = viewPageComponentEntity.getAuthority().toUpperCase();
         if (viewPageComponentMapper.getOneByAuthority(authority) != null) {
-            throw new BaseResponseException(FailureMessage.ADD_API_AUTHORITY_FAIL);
+            throw new BaseResponseException(failureMessage.i18n("view_page_component.add_fail_authority_exists"));
         }
         viewPageComponentEntity.setAuthority(authority);
         viewPageComponentEntity.setGmtModified(date);
@@ -58,7 +61,7 @@ public class ViewPageComponentServiceImpl implements ViewPageComponentService {
         String authority = viewPageComponentEntity.getAuthority().toUpperCase();
         ViewPageComponentEntity viewPageComponentEntity2 = viewPageComponentMapper.getOneByAuthority(authority);
         if (viewPageComponentEntity2 != null && !viewPageComponentEntity2.getId().equals(viewPageComponentEntity.getId())) {
-            throw new BaseResponseException(FailureMessage.ADD_API_AUTHORITY_FAIL);
+            throw new BaseResponseException(failureMessage.i18n("view_page_component.save_fail_authority_exists"));
         }
         viewPageComponentEntity1.setViewPageComponentType(viewPageComponentEntity.getViewPageComponentType());
         viewPageComponentEntity1.setName(viewPageComponentEntity.getName());

@@ -30,6 +30,9 @@ public class DictionaryCategoryServiceImpl implements DictionaryCategoryService 
     @Autowired
     private DictionaryMapper dictionaryMapper;
 
+    @Autowired
+    private FailureMessage failureMessage;
+
 //    @Override
 //    public Pagination<DictionaryCategoryEntity> pageAllParent(Integer page, Integer rows) {
 //        Pagination<DictionaryCategoryEntity> pagination = new Pagination<>();
@@ -76,11 +79,11 @@ public class DictionaryCategoryServiceImpl implements DictionaryCategoryService 
         for (Long id : idList) {
             DictionaryCategoryEntity dictionaryCategoryEntity = dictionaryCategoryMapper.getOneByParentId(id);
             if (dictionaryCategoryEntity != null) {
-                throw new BaseResponseException(FailureMessage.DELETE_DICTIONARY_CATEGORY_FAIL1);
+                throw new BaseResponseException(failureMessage.i18n("dictionary_category.delete_fail_has_children_category"));
             }
             DictionaryEntity dictionaryEntity = dictionaryMapper.getOneByDictionaryCategoryId(id);
             if (dictionaryEntity != null) {
-                throw new BaseResponseException(FailureMessage.DELETE_DICTIONARY_CATEGORY_FAIL2);
+                throw new BaseResponseException(failureMessage.i18n("dictionary_category.delete_fail_has_dictionary"));
             }
             dictionaryCategoryMapper.deleteOne(id);
             result++;

@@ -1,23 +1,32 @@
 package com.gioov.oryx.user.api;
 
+import com.gioov.oryx.common.FailureMessage;
+import com.gioov.oryx.common.jwt.JwtUtils;
+import com.gioov.oryx.system.service.DictionaryService;
+import com.gioov.oryx.user.entity.*;
+import com.gioov.oryx.user.mapper.UserRoleMapper;
+import com.gioov.oryx.user.service.ViewMenuService;
 import com.gioov.tile.web.exception.BaseResponseException;
 import com.gioov.oryx.common.easyui.Pagination;
 import com.gioov.oryx.common.operationlog.OperationLog;
 import com.gioov.oryx.common.operationlog.OperationLogType;
-import com.gioov.oryx.common.security.SimpleUser;
+import com.gioov.oryx.common.jwt.JwtUserDetails;
 import com.gioov.oryx.user.User;
-import com.gioov.oryx.user.entity.UserEntity;
 import com.gioov.oryx.user.mapper.UserMapper;
 import com.gioov.oryx.user.service.DepartmentService;
 import com.gioov.oryx.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +55,25 @@ UserRestController {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+
+    @Autowired
+    private ViewMenuService viewMenuService;
+
+    @Autowired
+    @Qualifier("jwtUserDetailsServiceImpl")
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private FailureMessage failureMessage;
+
+    @Autowired
+    private DictionaryService dictionaryService;
 
     /**
      * 分页获取所有用户
@@ -210,20 +238,20 @@ UserRestController {
     @PreAuthorize("hasRole('" + SYSTEM_ADMIN + "') OR hasAuthority('" + USER + "/GET_CURRENT_USER')")
     @GetMapping(value = "/get_current_user")
     public ResponseEntity<Map<String, Object>> getCurrentUser(HttpServletRequest httpServletRequest) {
-        SimpleUser simpleUser = userService.getCurrentSimpleUser(httpServletRequest);
+        JwtUserDetails jwtUserDetails = userService.getCurrentSimpleUser(httpServletRequest);
         Map<String, Object> map = new HashMap<>(0);
         map.put("id", null);
         map.put("username", null);
         map.put("avatar", null);
         map.put("email", null);
         map.put("authority", new ArrayList<>(0));
-        if(simpleUser != null) {
-            UserEntity userEntity = userMapper.getOne(simpleUser.getId());
+        if(jwtUserDetails != null) {
+            UserEntity userEntity = userMapper.getOne(jwtUserDetails.getId());
             map.put("id", userEntity.getId());
             map.put("username", userEntity.getUsername());
             map.put("avatar", userEntity.getAvatar());
             map.put("email", userEntity.getEmail());
-            Collection<GrantedAuthority> grantedAuthorityCollection = simpleUser.getAuthorities();
+            Collection<? extends GrantedAuthority> grantedAuthorityCollection = jwtUserDetails.getAuthorities();
             List<String> stringList = new ArrayList<>(0);
             if(grantedAuthorityCollection != null) {
                 for (GrantedAuthority grantedAuthority : grantedAuthorityCollection) {
@@ -232,8 +260,54 @@ UserRestController {
             }
             map.put("authority", stringList);
             map.put("department", departmentService.listAllByDepartmentId(userEntity.getDepartmentId()));
+            map.put("sideMenu", viewMenuService.listAllAsAntdVueMenuByUserId(userService.getCurrentUser().getId()));
         }
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
+
+//    @RequestMapping("/login")
+//    public ResponseEntity<Map<String, Object>> login(@RequestParam String username, @RequestParam String password) throws BaseResponseException {
+//        final JwtUserDetails jwtUserDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(username);
+//        if(jwtUserDetails == null) {
+//            throw new BaseResponseException(failureMessage.i18n("jwt.login_fail_account_or_password_not_correct"));
+//        }
+//
+//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        if(!passwordEncoder.matches(password, jwtUserDetails.getPassword())) {
+//            throw new BaseResponseException(failureMessage.i18n("jwt.login_fail_account_or_password_not_correct"));
+//        }
+//
+//        UserEntity userEntity = userService.getOne(jwtUserDetails.getId());
+//
+//        if(userEntity.getGmtDeleted() != null) {
+//            throw new BaseResponseException(failureMessage.i18n("jwt.login_fail_account_deleted"));
+//        }
+//
+//        if(!userEntity.getEnabled().equals(dictionaryService.get("IS_OR_NOT", "IS"))){
+//            throw new BaseResponseException(failureMessage.i18n("jwt.login_fail_account_is_not_enable"));
+//        }
+//
+//        // 生成 access token
+//        final String accessToken = jwtUtils.generateAccessToken(jwtUserDetails);
+//
+//        Map<String, Object> map = new HashMap<>(8);
+//
+//            map.put("accessToken", accessToken);
+//            map.put("id", userEntity.getId());
+//            map.put("username", userEntity.getUsername());
+//            map.put("avatar", userEntity.getAvatar());
+//            map.put("email", userEntity.getEmail());
+//            Collection<? extends GrantedAuthority> grantedAuthorityCollection = jwtUserDetails.getAuthorities();
+//            List<String> stringList = new ArrayList<>(6);
+//            if(grantedAuthorityCollection != null) {
+//                for (GrantedAuthority grantedAuthority : grantedAuthorityCollection) {
+//                    stringList.add(grantedAuthority.getAuthority());
+//                }
+//            }
+//            map.put("authority", stringList);
+//            map.put("department", departmentService.listAllByDepartmentId(userEntity.getDepartmentId()));
+//            map.put("sideMenu", viewMenuService.listAllAsAntdVueMenuByUserId(userEntity.getId()));
+//        return new ResponseEntity<>(map, HttpStatus.OK);
+//    }
 
 }

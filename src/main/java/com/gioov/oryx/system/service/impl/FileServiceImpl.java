@@ -1,5 +1,6 @@
 package com.gioov.oryx.system.service.impl;
 
+import com.gioov.oryx.common.FailureMessage;
 import com.gioov.tile.util.DataSizeUtil;
 import com.gioov.tile.util.FileUtil;
 import com.gioov.tile.web.exception.BaseResponseException;
@@ -39,10 +40,10 @@ public class FileServiceImpl implements FileService {
     private FileMapper fileMapper;
 
     @Autowired
-    private DictionaryService dictionaryService;
+    private AppProperties appProperties;
 
     @Autowired
-    private AppProperties appProperties;
+    private FailureMessage failureMessage;
 
     @Override
     public Pagination<FileEntity> pageAll(Integer page, Integer rows) {
@@ -56,7 +57,6 @@ public class FileServiceImpl implements FileService {
 
     /**
      * 文件上传方法
-     *
      * @param file
      * @return
      * @throws BaseResponseException
@@ -77,14 +77,12 @@ public class FileServiceImpl implements FileService {
         calendar.setTime(date);
         String year = String.valueOf(calendar.get(Calendar.YEAR));
         String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
-        LOGGER.info("month1={}", calendar.get(Calendar.MONTH));
-        LOGGER.info("month2={}", month);
 
         String datePath = File.separator + year + File.separator + month + File.separator;
         String uploadPath = FileUtil.getCurrentRootPath() + appProperties.getFileUploadPath() + datePath;
 
         if (!FileUtil.createDirectory(uploadPath)) {
-            throw new BaseResponseException("文件上传失败");
+            throw new BaseResponseException(failureMessage.i18n("file.upload_fail"));
         }
         fileEntity.setPath(datePath);
         String guid = simpleDateFormat.format(date) + "_" + UUID.randomUUID() + "." + FileUtil.getSuffix(file.getOriginalFilename());
@@ -104,7 +102,7 @@ public class FileServiceImpl implements FileService {
             fileEntity = upload(file);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BaseResponseException("文件上传失败");
+            throw new BaseResponseException(failureMessage.i18n("file.upload_fail"));
         }
         return fileEntity;
     }
@@ -113,7 +111,7 @@ public class FileServiceImpl implements FileService {
     @Transactional(rollbackFor = Throwable.class)
     public List<FileEntity> uploadAll(List<MultipartFile> fileList) throws BaseResponseException {
         if (fileList == null || fileList.isEmpty()) {
-            throw new BaseResponseException("文件上传失败");
+            throw new BaseResponseException(failureMessage.i18n("file.upload_fail"));
         }
         List<FileEntity> fileEntityList = new ArrayList<>();
         try {
@@ -122,7 +120,7 @@ public class FileServiceImpl implements FileService {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BaseResponseException("文件上传失败");
+            throw new BaseResponseException(failureMessage.i18n("file.upload_fail"));
         }
         return fileEntityList.isEmpty() ? null : fileEntityList;
     }
@@ -142,10 +140,8 @@ public class FileServiceImpl implements FileService {
     @Transactional(rollbackFor = Throwable.class)
     public int deleteAll(List<Long> idList) {
         int result = 0;
-
         for (Long id : idList) {
             FileEntity fileEntity = fileMapper.getOne(id);
-
             if (fileEntity != null) {
                 String uploadPath = appProperties.getFileUploadPath();
                 String filename = File.separator + FileUtil.filterFileSeparator(FileUtil.getCurrentRootPath() + uploadPath + fileEntity.getPath() + fileEntity.getGuid());
@@ -165,9 +161,8 @@ public class FileServiceImpl implements FileService {
     @Override
     public void download(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, String guid) throws BaseResponseException {
         FileEntity fileEntity = fileMapper.getOneByGuid(guid);
-//        String uploadPath = (String) dictionaryService.get("FILE", "UPLOAD_PATH");
             if(fileEntity == null) {
-                throw new BaseResponseException("文件不存在，文件下载失败");
+                throw new BaseResponseException(failureMessage.i18n("file.download_fail_file_not_exists"));
             }
         String uploadPath = appProperties.getFileUploadPath();
         String absolutePath = File.separator + FileUtil.filterFileSeparator(FileUtil.getCurrentRootPath() + uploadPath + fileEntity.getPath() + fileEntity.getGuid());
@@ -176,7 +171,7 @@ public class FileServiceImpl implements FileService {
             FileUtil.download(httpServletRequest, httpServletResponse, fileEntity.getMimeType(), fileEntity.getName(), absoluteFile);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new BaseResponseException("文件下载失败");
+            throw new BaseResponseException(failureMessage.i18n("file.download_fail"));
         }
     }
 
