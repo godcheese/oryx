@@ -18,7 +18,7 @@
   </a>
 </p>
 
-## 简介 Introduction
+## 简介 Introduction 作者QQ：1176394803（可有尝提供技术支持或改代码）
 > oryx 英 [ˈɒrɪks] 美 [ˈɔːrɪks] n.大羚羊(有长角)
 
 Oryx 是一款基于 Spring Boot 封装前后端分离 Java Web 平台快速开发脚手架，所采用的技术栈包括 Spring Boot、Spring、Spring MVC、MyBatis、Vue 等，遵守[阿里巴巴 Java 开发规约](https://github.com/alibaba/p3c)，帮助养成良好的编码习惯。整体采用 RBAC （ Role-Based Access Control ，基于角色的访问控制），具有严格的权限控制模块，支持系统与模块分离开发。最后希望这个项目能够对你有所帮助。
